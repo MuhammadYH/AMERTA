@@ -187,6 +187,151 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ================= site detail modal (Detail Situs page) ================= */
+  const modalOverlay = document.getElementById('siteModal');
+  if (modalOverlay) {
+    const modalName = document.getElementById('modalName');
+    const modalType = document.getElementById('modalType');
+    const modalStatus = document.getElementById('modalStatus');
+    const modalStatusLabel = document.getElementById('modalStatusLabel');
+    const modalTemp = document.getElementById('modalTemp');
+    const modalHum = document.getElementById('modalHum');
+    const modalVib = document.getElementById('modalVib');
+    const modalBattery = document.getElementById('modalBattery');
+    const modalSync = document.getElementById('modalSync');
+    const modalNotesList = document.getElementById('modalNotesList');
+    const modalChartEl = document.getElementById('modalChart');
+    const modalCloseEls = [document.getElementById('modalClose'), document.getElementById('modalCloseBtn')];
+    let modalChartInstance = null;
+
+    function openModal(card) {
+      const d = card.dataset;
+      modalName.textContent = d.name || '—';
+      modalType.textContent = d.sync ? ('Diperbarui ' + d.sync) : '—';
+      modalStatus.className = 'badge ' + (d.status || 'up');
+      modalStatusLabel.textContent = d.statusLabel || 'Normal';
+      modalTemp.textContent = d.temp || '—';
+      modalHum.textContent = d.hum || '—';
+      modalVib.textContent = d.vib || '—';
+      modalBattery.textContent = d.battery || '—';
+      modalSync.textContent = d.sync || '—';
+
+      modalNotesList.innerHTML = '';
+      (d.notes || '').split('|').filter(Boolean).forEach((note) => {
+        const li = document.createElement('li');
+        li.textContent = note;
+        modalNotesList.appendChild(li);
+      });
+
+      const tempTrend = JSON.parse(d.tempSpark || '[]');
+      const humTrend = JSON.parse(d.humSpark || '[]');
+      const vibTrend = JSON.parse(d.vibSpark || '[]');
+
+      if (modalChartInstance) modalChartInstance.destroy();
+      modalChartInstance = new Chart(modalChartEl, {
+        type: 'line',
+        data: {
+          labels: tempTrend.map((_, i) => i),
+          datasets: [
+            {
+              label: 'Suhu (°C)',
+              data: tempTrend,
+              borderColor: '#C2872F',
+              backgroundColor: 'transparent',
+              tension: 0.4, borderWidth: 2.5, pointRadius: 0, yAxisID: 'y',
+            },
+            {
+              label: 'Kelembapan (%)',
+              data: humTrend,
+              borderColor: '#B5482B',
+              backgroundColor: 'transparent',
+              tension: 0.4, borderWidth: 2.5, pointRadius: 0, yAxisID: 'y1',
+            },
+            {
+              label: 'Getaran (mm/s)',
+              data: vibTrend,
+              borderColor: '#4C7A4A',
+              backgroundColor: 'transparent',
+              tension: 0.4, borderWidth: 2.5, pointRadius: 0, yAxisID: 'y2',
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: true, position: 'top', align: 'start', labels: { boxWidth: 8, boxHeight: 8, usePointStyle: true, padding: 12, font: { size: 10.5 } } },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            x: { display: true, grid: { display: false }, ticks: { maxTicksLimit: 6, font: { size: 10 } } },
+            y:  { display: true, position: 'left',  grid: { color: gridColor }, ticks: { maxTicksLimit: 5, font: { size: 10 }, callback: (v) => v + '°' } },
+            y1: { display: true, position: 'right', grid: { display: false }, ticks: { maxTicksLimit: 5, font: { size: 10 }, callback: (v) => v + '%' } },
+            y2: { display: true, position: 'right', offset: true, grid: { display: false }, ticks: { maxTicksLimit: 5, font: { size: 10 } } }
+          }
+        }
+      });
+
+      modalOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.monitor-card').forEach((card) => {
+      card.addEventListener('click', () => openModal(card));
+    });
+    modalCloseEls.forEach((el) => el && el.addEventListener('click', closeModal));
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeModal();
+    });
+  }
+
+  /* ================= functional search (navbar) ================= */
+  const searchInput = document.querySelector('.search input');
+  if (searchInput) {
+    const monitorCards = document.querySelectorAll('.monitor-card');
+    const noResultsEl = document.getElementById('noResults');
+
+    function filterSites(query) {
+      const q = query.trim().toLowerCase();
+      let visibleCount = 0;
+      monitorCards.forEach((card) => {
+        const name = (card.dataset.name || '').toLowerCase();
+        const type = (card.dataset.type || '').toLowerCase();
+        const match = !q || name.includes(q) || type.includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+      if (noResultsEl) noResultsEl.style.display = (q && visibleCount === 0) ? 'block' : 'none';
+    }
+
+    if (monitorCards.length) {
+      // we're on the Detail Situs page: filter live as the user types
+      searchInput.addEventListener('input', () => filterSites(searchInput.value));
+
+      const params = new URLSearchParams(window.location.search);
+      const initialQuery = params.get('q');
+      if (initialQuery) {
+        searchInput.value = initialQuery;
+        filterSites(initialQuery);
+      }
+    } else {
+      // other pages: Enter jumps to Detail Situs with the query applied
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && searchInput.value.trim()) {
+          window.location.href = 'situs.html?q=' + encodeURIComponent(searchInput.value.trim());
+        }
+      });
+    }
+  }
+
   /* ================= mobile menu toggle ================= */
   const sidebarEl = document.querySelector('.sidebar');
   const overlayEl = document.querySelector('.sidebar-overlay');
