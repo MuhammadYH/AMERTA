@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMERTA — Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="blob-c"></div>
+<div class="shell">
+  <div class="sidebar-overlay"></div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><span></span></div>
+      <div>
+        <div class="brand-name">AMERTA</div>
+        <div class="brand-sub">warisan.trowulan.id</div>
+      </div>
+    </div>
+
+    <div class="nav-group-label">Menu</div>
+    <nav class="nav-list">
+      <a class="nav-item active" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="situs.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+        Detail Situs
+      </a>
+      <a class="nav-item" href="peta.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-7.58-7-12a7 7 0 0 1 14 0c0 4.42-7 12-7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
+        Peta &amp; Lokasi
+      </a>
+      <a class="nav-item" href="arsip.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg>
+        Arsip Digital
+      </a>
+    </nav>
+
+    <div class="nav-group-label">Kelembagaan</div>
+    <nav class="nav-list">
+      <a class="nav-item disabled" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87"/><path d="M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Tim &amp; Pemangku Kepentingan
+        <span class="nav-soon">soon</span>
+      </a>
+      <a class="nav-item disabled" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifikasi Real-time
+        <span class="nav-soon">soon</span>
+      </a>
+      <a class="nav-item disabled" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        Pengaturan Ambang Batas
+        <span class="nav-soon">soon</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="status-pill"><span class="pip"></span> 5 dari 6 situs normal</div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="icon-btn menu-toggle" aria-label="Buka menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="topbar-page">
+        <span class="eyebrow">AMERTA / Dashboard</span>
+        <span class="heading">Selamat pagi, Tim BPCB 👋</span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Cari situs, sensor, atau ID peringatan…">
+      </div>
+      <button class="icon-btn" aria-label="Notifikasi"><span class="dot"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <div class="avatar">RH</div>
+    </header>
+
+    <!-- ROW 1: hero + stats -->
+    <div class="grid-top">
+      <div class="pulse-hero">
+        <div class="pulse-top">
+          <div class="pulse-badge"><span class="pip"></span> 5 dari 6 situs normal</div>
+          <div class="pulse-menu"><span></span><span></span><span></span></div>
+        </div>
+        <div class="pulse-mid">
+          <div class="label">Indeks kondisi situs · Kawasan Trowulan</div>
+          <div class="value">91.6<small>/100</small></div>
+        </div>
+        <div class="pulse-wave">
+          <svg viewBox="0 0 300 44" preserveAspectRatio="none">
+            <path d="M0 26 L20 26 L28 18 L36 30 L44 20 L52 26 L70 26 L78 12 L86 32 L94 22 L102 26 L300 26" />
+          </svg>
+        </div>
+        <div class="pulse-bottom">
+          <div class="meta">6 situs · sensor tiap 15 menit · LoRaWAN</div>
+          <a class="pulse-btn" href="peta.html">Lihat peta sebaran
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          Suhu rata-rata kawasan
+        </div>
+        <div class="stat-value">29.4<span style="font-size:15px;font-weight:600;color:var(--muted)">°C</span></div>
+        <div class="stat-delta neg">▲ 1.2°C vs kemarin</div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-label">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3s6 6.5 6 11a6 6 0 1 1-12 0c0-4.5 6-11 6-11Z"/></svg>
+          Kelembapan relatif rata-rata
+        </div>
+        <div class="stat-value">78<span style="font-size:15px;font-weight:600;color:var(--muted)">%</span></div>
+        <div class="stat-delta neu">▼ 4% vs kemarin</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card stat-card">
+        <div class="stat-label">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+          Peringatan aktif
+        </div>
+        <div class="stat-value">1</div>
+        <div class="stat-delta neu">Sejak 2 jam lalu</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+          Data tersinkron (24 jam)
+        </div>
+        <div class="stat-value">99.4<span style="font-size:15px;font-weight:600;color:var(--muted)">%</span></div>
+        <div class="stat-delta pos">17.204 / 17.318 paket data</div>
+      </div>
+    </div>
+
+    <!-- ROW 2: charts -->
+    <div class="grid-charts">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Kelembapan &amp; suhu</div>
+            <div class="card-sub">Rolling 24 jam, seluruh titik sensor</div>
+          </div>
+          <div class="tabs">
+            <button class="tab active">24J</button>
+            <button class="tab">7H</button>
+            <button class="tab">30H</button>
+          </div>
+        </div>
+        <div class="chart-box"><canvas id="climateTrendChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Getaran struktural vs ambang batas</div>
+            <div class="card-sub">Rata-rata harian per situs</div>
+          </div>
+        </div>
+        <div class="chart-box"><canvas id="vibrationChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ROW 3: actions -->
+    <div class="card">
+      <div class="action-row">
+        <button class="pill-btn primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+          Tambah sensor
+        </button>
+        <button class="pill-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v6h-6"/></svg>
+          Jalankan pemindaian
+        </button>
+        <button class="pill-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          Cari situs…
+        </button>
+        <div class="action-spacer"></div>
+        <div class="action-icons">
+          <button class="icon-btn" aria-label="Ekspor data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></button>
+          <button class="icon-btn" aria-label="Filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16l-6 8v6l-4 2v-8L4 4Z"/></svg></button>
+          <button class="icon-btn" aria-label="Segarkan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v6h-6"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 4: alerts + sites -->
+    <div class="grid-split">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Peringatan terbaru</div>
+            <div class="card-sub">Anomali dari deteksi edge computing</div>
+          </div>
+        </div>
+
+        <div class="event-row">
+          <div class="event-icon warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+          </div>
+          <div class="event-body">
+            <div class="event-title">Getaran melebihi ambang batas — Gapura Wringin Lawang</div>
+            <div class="event-sub">2.4 mm/s (ambang 2.0) · terdeteksi 2 jam lalu · ditugaskan ke Aditya P.</div>
+          </div>
+          <div class="event-right"><span class="event-tag major">Diselidiki</span></div>
+        </div>
+
+        <div class="event-row">
+          <div class="event-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </div>
+          <div class="event-body">
+            <div class="event-title">Kelembapan ekstrem — Kolam Segaran</div>
+            <div class="event-sub">Sempat 96% RH selama 18 menit · kembali normal otomatis</div>
+          </div>
+          <div class="event-right"><span class="event-tag resolved">Selesai</span></div>
+        </div>
+
+        <div class="event-row">
+          <div class="event-icon warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+          </div>
+          <div class="event-body">
+            <div class="event-title">Baterai node sensor rendah — Candi Brahu</div>
+            <div class="event-sub">Terdeteksi kemarin, 08:12 · estimasi habis dalam 6 hari</div>
+          </div>
+          <div class="event-right"><span class="event-tag major">Teridentifikasi</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Situs terpantau</div>
+            <div class="card-sub">Status dan kondisi terkini per titik sensor</div>
+          </div>
+          <a class="link-more" href="situs.html">Lihat detail →</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Situs</th><th>Status</th><th>Suhu</th><th>Kelembapan</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="cell-name"><span class="favicon">CT</span>Candi Tikus</div></td>
+                <td><span class="badge up"><span class="pip"></span>Normal</span></td>
+                <td class="mono">30.1°C</td>
+                <td class="mono">74%</td>
+              </tr>
+              <tr>
+                <td><div class="cell-name"><span class="favicon">BR</span>Candi Bajang Ratu</div></td>
+                <td><span class="badge up"><span class="pip"></span>Normal</span></td>
+                <td class="mono">29.6°C</td>
+                <td class="mono">76%</td>
+              </tr>
+              <tr>
+                <td><div class="cell-name"><span class="favicon">CB</span>Candi Brahu</div></td>
+                <td><span class="badge up"><span class="pip"></span>Normal</span></td>
+                <td class="mono">28.9°C</td>
+                <td class="mono">80%</td>
+              </tr>
+              <tr>
+                <td><div class="cell-name"><span class="favicon">WL</span>Gapura Wringin Lawang</div></td>
+                <td><span class="badge warn"><span class="pip"></span>Perhatian</span></td>
+                <td class="mono">31.8°C</td>
+                <td class="mono">69%</td>
+              </tr>
+              <tr>
+                <td><div class="cell-name"><span class="favicon">KS</span>Kolam Segaran</div></td>
+                <td><span class="badge up"><span class="pip"></span>Normal</span></td>
+                <td class="mono">27.4°C</td>
+                <td class="mono">88%</td>
+              </tr>
+              <tr>
+                <td><div class="cell-name"><span class="favicon">PA</span>Pendopo Agung Trowulan</div></td>
+                <td><span class="badge up"><span class="pip"></span>Normal</span></td>
+                <td class="mono">29.0°C</td>
+                <td class="mono">71%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
