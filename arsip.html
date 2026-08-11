@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="is-loading">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,54 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<!-- ===== PAGE LOADER ===== -->
+<div class="page-loader" id="pageLoader">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="amertaOutline" x="-40%" y="-40%" width="180%" height="180%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="2.4" result="dilated"/>
+        <feComposite in="dilated" in2="SourceAlpha" operator="out" result="ring"/>
+        <feFlood flood-color="#B5482B" result="ringColor"/>
+        <feComposite in="ringColor" in2="ring" operator="in"/>
+      </filter>
+    </defs>
+  </svg>
+  <div class="loader-emblem">
+    <img class="emblem-outline" src="img/amerta-logo.png" alt="" aria-hidden="true">
+    <img class="emblem-fill" src="img/amerta-logo.png" alt="Amerta">
+    <div class="loader-label"><span>Memuat AMERTA…</span></div>
+  </div>
+</div>
+<script>
+  (function(){
+    var SKIP_KEY = 'amerta_skip_loader';
+    var loaderEl = document.getElementById('pageLoader');
+
+    // navigated here via an internal link click → skip the intro animation
+    if (sessionStorage.getItem(SKIP_KEY) === '1') {
+      sessionStorage.removeItem(SKIP_KEY);
+      if (loaderEl) loaderEl.remove();
+      document.documentElement.classList.remove('is-loading');
+    } else {
+      var MIN_DURATION = 2000; // fixed duration, ms — only on first open/refresh
+      setTimeout(function(){
+        if (!loaderEl) return;
+        loaderEl.classList.add('is-hidden');
+        document.documentElement.classList.remove('is-loading');
+        setTimeout(function(){ loaderEl.remove(); }, 500);
+      }, MIN_DURATION);
+    }
+
+    // mark any internal page navigation so the NEXT page load skips the loader
+    document.addEventListener('click', function(e){
+      var link = e.target.closest('a[href$=".html"]');
+      if (!link) return;
+      if (link.target === '_blank' || e.defaultPrevented) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      sessionStorage.setItem(SKIP_KEY, '1');
+    }, true);
+  })();
+</script>
 <div class="blob-c"></div>
 <div class="shell">
   <div class="sidebar-overlay"></div>
@@ -14,11 +62,7 @@
   <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-mark"><span></span></div>
-      <div>
-        <div class="brand-name">AMERTA</div>
-        <div class="brand-sub">warisan.trowulan.id</div>
-      </div>
+      <img class="brand-logo" src="img/amerta-logo-full.png" alt="AMERTA — Rumeksa Tilas, Rumawat Pradaban">
     </div>
 
     <div class="nav-group-label">Menu</div>
@@ -41,27 +85,11 @@
       </a>
     </nav>
 
-    <div class="nav-group-label">Kelembagaan</div>
-    <nav class="nav-list">
-      <a class="nav-item disabled" href="#">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87"/><path d="M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Tim &amp; Pemangku Kepentingan
-        <span class="nav-soon">soon</span>
-      </a>
-      <a class="nav-item disabled" href="#">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        Notifikasi Real-time
-        <span class="nav-soon">soon</span>
-      </a>
-      <a class="nav-item disabled" href="#">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
-        Pengaturan Ambang Batas
-        <span class="nav-soon">soon</span>
-      </a>
-    </nav>
-
     <div class="sidebar-foot">
-      <div class="status-pill"><span class="pip"></span> 5 dari 6 situs normal</div>
+      <a class="nav-item" href="pengaturan.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        Pengaturan
+      </a>
     </div>
   </aside>
 
@@ -78,8 +106,13 @@
       </div>
       <div class="topbar-spacer"></div>
       <div class="search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <button class="search-toggle" type="button" aria-label="Buka pencarian">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
         <input type="text" placeholder="Cari situs, sensor, atau ID peringatan…">
+        <button class="search-close" type="button" aria-label="Tutup pencarian">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
       </div>
       <button class="icon-btn" aria-label="Notifikasi"><span class="dot"></span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -87,136 +120,251 @@
       <div class="avatar">RH</div>
     </header>
 
-    <!-- filter -->
-    <div class="card">
-      <div class="action-row">
-        <div>
-          <div class="card-title">Jenis arsip</div>
-          <div class="card-sub">Filter untuk menyaring entri di daftar arsip</div>
-        </div>
-        <div class="action-spacer"></div>
-        <div class="period-pills">
-          <button class="pill-btn primary">Semua</button>
-          <button class="pill-btn">Foto</button>
-          <button class="pill-btn">Video</button>
-          <button class="pill-btn">Laporan</button>
-          <button class="pill-btn">Model 3D</button>
-        </div>
-      </div>
-    </div>
+    <!-- ARSIP layout: left = jenis arsip/filter + daftar arsip, right = doughnut chart + ringkasan -->
+    <div class="arsip-layout">
 
-    <!-- stats -->
-    <div class="grid-4">
-      <div class="card stat-card">
-        <div class="stat-label">Total entri arsip</div>
-        <div class="stat-value">486</div>
-        <div class="stat-delta pos">▲ 24 bulan ini</div>
-      </div>
-      <div class="card stat-card">
-        <div class="stat-label">Kapasitas terpakai</div>
-        <div class="stat-value">38.6<span style="font-size:15px;font-weight:600;color:var(--muted)">GB</span></div>
-        <div class="stat-delta neu">Redundansi penyimpanan ganda</div>
-      </div>
-      <div class="card stat-card">
-        <div class="stat-label">Model 3D terarsip</div>
-        <div class="stat-value">6</div>
-        <div class="stat-delta neu">1 per situs</div>
-      </div>
-      <div class="card stat-card">
-        <div class="stat-label">Diakses via API bulan ini</div>
-        <div class="stat-value">312<span style="font-size:15px;font-weight:600;color:var(--muted)">x</span></div>
-        <div class="stat-delta pos">Oleh BPCB, akademisi &amp; pelajar</div>
-      </div>
-    </div>
+      <!-- LEFT (larger) -->
+      <div class="arsip-main">
 
-    <!-- charts -->
-    <div class="grid-charts">
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <div class="card-title">Entri arsip baru</div>
-            <div class="card-sub">Rata-rata mingguan, 8 minggu terakhir</div>
+        <!-- filter -->
+        <div class="card">
+          <div class="action-row">
+            <div>
+              <div class="card-title">Jenis arsip</div>
+              <div class="card-sub">Filter untuk menyaring entri di daftar arsip</div>
+            </div>
+            <div class="action-spacer"></div>
+            <div class="period-pills arsip-filter-pills">
+              <button class="pill-btn primary" data-filter="semua">Semua</button>
+              <button class="pill-btn" data-filter="foto">Foto</button>
+              <button class="pill-btn" data-filter="video">Video</button>
+              <button class="pill-btn" data-filter="laporan">Laporan</button>
+              <button class="pill-btn" data-filter="model-3d">Model 3D</button>
+            </div>
           </div>
         </div>
-        <div class="chart-box"><canvas id="archiveTrendChart"></canvas></div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <div class="card-title">Distribusi jenis arsip</div>
-            <div class="card-sub">Berdasarkan jumlah entri</div>
+
+        <!-- archive entries -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Entri terbaru</div>
+              <div class="card-sub">Diverifikasi dan disimpan permanen dengan metadata waktu &amp; koordinat</div>
+            </div>
+            <button class="pill-btn primary" style="padding:8px 14px;">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+              Unggah arsip
+            </button>
           </div>
-        </div>
-        <div class="chart-box"><canvas id="archiveTypeChart"></canvas></div>
-      </div>
-    </div>
 
-    <!-- archive entries -->
-    <div class="card">
-      <div class="card-head">
-        <div>
-          <div class="card-title">Entri terbaru</div>
-          <div class="card-sub">Diverifikasi dan disimpan permanen dengan metadata waktu &amp; koordinat</div>
+          <div class="arc-grid" id="archiveGrid">
+
+            <div class="arc-card" data-type="laporan">
+              <div class="arc-thumb thumb-a">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Wringin%20Lawang%2C%20Trowulan.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Laporan inspeksi bulanan — Gapura Wringin Lawang</div>
+                <div class="arc-card-meta">6 Agu 2026 · PDF · 2.1 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="model-3d">
+              <div class="arc-thumb thumb-b">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Candi%20Tikus.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Model 3D — Candi Tikus (pemindaian fotogrametri)</div>
+                <div class="arc-card-meta">2 Agu 2026 · GLB · 118 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="video">
+              <div class="arc-thumb thumb-c">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Candi%20Bajang%20Ratu.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M23 7l-7 5 7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Dokumentasi drone — Zona bata merah, Kab. Mojokerto</div>
+                <div class="arc-card-meta">30 Jul 2026 · MP4 · 640 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="laporan">
+              <div class="arc-thumb thumb-d">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/TEMPAT%20IKRAR%20PATIH%20GADJAH%20MADA.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Rekapitulasi kondisi situs — Juli 2026</div>
+                <div class="arc-card-meta">1 Agu 2026 · PDF · 3.4 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="foto">
+              <div class="arc-thumb thumb-a">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Candi%20Bajang%20Ratu.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Foto pemetaan retak — Candi Bajang Ratu</div>
+                <div class="arc-card-meta">28 Jul 2026 · JPG (24 foto) · 96 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="laporan">
+              <div class="arc-thumb thumb-b">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kolam%20Segaran%20di%20Kawasan%20Arkeologis%20Trowulan%20Mojokerto.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Ringkasan triwulan — Forum Masyarakat KCBN Trowulan</div>
+                <div class="arc-card-meta">5 Jul 2026 · CSV · 210 KB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="model-3d">
+              <div class="arc-thumb thumb-c">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Brahu%20Temple%20Trowulan.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Model 3D — Candi Brahu (pemindaian fotogrametri)</div>
+                <div class="arc-card-meta">20 Jul 2026 · GLB · 104 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="video">
+              <div class="arc-thumb thumb-d">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Wringin%20Lawang%2C%20Trowulan.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M23 7l-7 5 7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Wawancara juru pelihara situs</div>
+                <div class="arc-card-meta">15 Jul 2026 · MP4 · 320 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="foto">
+              <div class="arc-thumb thumb-a">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kolam%20Segaran%20di%20Kawasan%20Arkeologis%20Trowulan%20Mojokerto.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Dokumentasi restorasi — Kolam Segaran</div>
+                <div class="arc-card-meta">10 Jul 2026 · JPG (18 foto) · 62 MB</div>
+              </div>
+            </div>
+
+            <div class="arc-card" data-type="laporan">
+              <div class="arc-thumb thumb-b">
+                <img class="arc-thumb-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/TEMPAT%20IKRAR%20PATIH%20GADJAH%20MADA.jpg?width=400" alt="" loading="lazy">
+                <div class="arc-thumb-badge"><svg class="arc-thumb-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg></div>
+                <div class="arc-thumb-actions">
+                  <button class="arc-icon-btn" type="button" aria-label="Simpan arsip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg></button>
+                  <button class="arc-icon-btn" type="button" aria-label="Tandai favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-1.5 3-3.28 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.22 1.5 4 3 5.5l7 7Z"/></svg></button>
+                </div>
+              </div>
+              <div class="arc-card-body">
+                <div class="arc-card-title">Asesmen struktur — Pendopo Agung Trowulan</div>
+                <div class="arc-card-meta">3 Jul 2026 · PDF · 1.8 MB</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="no-results" id="archiveNoResults" style="display:none;">Tidak ada arsip untuk filter ini.</div>
+
+          <div class="arc-pagination" id="archivePagination"></div>
         </div>
-        <button class="pill-btn primary" style="padding:8px 14px;">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
-          Unggah arsip
-        </button>
+
       </div>
 
-      <div class="report-row">
-        <div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg></div>
-        <div class="report-body">
-          <div class="report-name">Laporan inspeksi bulanan — Gapura Wringin Lawang</div>
-          <div class="report-meta">Diunggah 6 Agu 2026 · PDF · 2.1 MB</div>
+      <!-- RIGHT (smaller) -->
+      <div class="arsip-side">
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Distribusi jenis arsip</div>
+              <div class="card-sub">Berdasarkan jumlah entri</div>
+            </div>
+          </div>
+          <div class="chart-box compact"><canvas id="archiveTypeChart"></canvas></div>
         </div>
-        <button class="row-btn ghost">Unduh</button>
+
+        <div class="card stat-card compact">
+          <div class="stat-compact-info">
+            <div class="stat-label">Total entri arsip</div>
+            <div class="stat-delta pos">▲ 24 bulan ini</div>
+          </div>
+          <div class="stat-value">486</div>
+        </div>
+
+        <div class="card stat-card compact">
+          <div class="stat-compact-info">
+            <div class="stat-label">Kapasitas terpakai</div>
+            <div class="stat-delta neu">Redundansi ganda</div>
+          </div>
+          <div class="stat-value">38.6<span style="font-size:12px;font-weight:600;color:var(--muted)">GB</span></div>
+        </div>
+
+        <div class="card stat-card compact">
+          <div class="stat-compact-info">
+            <div class="stat-label">Model 3D terarsip</div>
+            <div class="stat-delta neu">1 per situs</div>
+          </div>
+          <div class="stat-value">6</div>
+        </div>
+
+        <div class="card stat-card compact">
+          <div class="stat-compact-info">
+            <div class="stat-label">Diakses via API bulan ini</div>
+            <div class="stat-delta pos">BPCB &amp; akademisi</div>
+          </div>
+          <div class="stat-value">312<span style="font-size:12px;font-weight:600;color:var(--muted)">x</span></div>
+        </div>
+
       </div>
 
-      <div class="report-row">
-        <div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
-        <div class="report-body">
-          <div class="report-name">Model 3D — Candi Tikus (pemindaian fotogrametri)</div>
-          <div class="report-meta">Diunggah 2 Agu 2026 · GLB · 118 MB</div>
-        </div>
-        <button class="row-btn ghost">Unduh</button>
-      </div>
-
-      <div class="report-row">
-        <div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 7l-7 5 7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-        <div class="report-body">
-          <div class="report-name">Dokumentasi drone — Zona bata merah, Kabupaten Mojokerto</div>
-          <div class="report-meta">Diunggah 30 Jul 2026 · MP4 · 640 MB</div>
-        </div>
-        <button class="row-btn ghost">Unduh</button>
-      </div>
-
-      <div class="report-row">
-        <div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg></div>
-        <div class="report-body">
-          <div class="report-name">Rekapitulasi kondisi situs — Juli 2026</div>
-          <div class="report-meta">Diunggah 1 Agu 2026 · PDF · 3.4 MB</div>
-        </div>
-        <button class="row-btn ghost">Unduh</button>
-      </div>
-
-      <div class="report-row">
-        <div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
-        <div class="report-body">
-          <div class="report-name">Foto pemetaan retak — Candi Bajang Ratu</div>
-          <div class="report-meta">Diunggah 28 Jul 2026 · JPG (24 foto) · 96 MB</div>
-        </div>
-        <button class="row-btn ghost">Unduh</button>
-      </div>
-
-      <div class="report-row">
-        <div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg></div>
-        <div class="report-body">
-          <div class="report-name">Ringkasan triwulan untuk Forum Masyarakat KCBN Trowulan</div>
-          <div class="report-meta">Diunggah 5 Jul 2026 · CSV · 210 KB</div>
-        </div>
-        <button class="row-btn ghost">Unduh</button>
-      </div>
     </div>
 
   </div>

@@ -2,6 +2,27 @@
    Shared interactions + Chart.js setups.
    Each chart only initializes if its canvas exists on the current page. */
 
+/* Foto situs — Wikimedia Commons (Special:FilePath, dilisensikan CC).
+   Dipakai bersama oleh modal Detail Situs dan penanda Peta & Lokasi. */
+const SITE_PHOTOS = {
+  'Candi Tikus': 'https://commons.wikimedia.org/wiki/Special:FilePath/Candi%20Tikus.jpg?width=600',
+  'Candi Bajang Ratu': 'https://commons.wikimedia.org/wiki/Special:FilePath/Candi%20Bajang%20Ratu.jpg?width=600',
+  'Candi Brahu': 'https://commons.wikimedia.org/wiki/Special:FilePath/Brahu%20Temple%20Trowulan.jpg?width=600',
+  'Gapura Wringin Lawang': 'https://commons.wikimedia.org/wiki/Special:FilePath/Wringin%20Lawang%2C%20Trowulan.jpg?width=600',
+  'Kolam Segaran': 'https://commons.wikimedia.org/wiki/Special:FilePath/Kolam%20Segaran%20di%20Kawasan%20Arkeologis%20Trowulan%20Mojokerto.jpg?width=600',
+  'Pendopo Agung Trowulan': 'https://commons.wikimedia.org/wiki/Special:FilePath/TEMPAT%20IKRAR%20PATIH%20GADJAH%20MADA.jpg?width=600',
+};
+
+/* Koordinat asli 6 situs di Kawasan Trowulan (BPCB Jatim / Wikidata). */
+const SITE_LOCATIONS = [
+  { name: 'Candi Tikus', lat: -7.5718, lng: 112.4035, status: 'up', zone: 'Zona inti A · zona bata merah' },
+  { name: 'Candi Bajang Ratu', lat: -7.5677, lng: 112.3988, status: 'up', zone: 'Zona inti A · zona bata merah' },
+  { name: 'Candi Brahu', lat: -7.5430, lng: 112.3745, status: 'up', zone: 'Zona inti B' },
+  { name: 'Gapura Wringin Lawang', lat: -7.5419, lng: 112.3910, status: 'warn', zone: 'Zona inti B · getaran di atas ambang' },
+  { name: 'Kolam Segaran', lat: -7.5578, lng: 112.3818, status: 'up', zone: 'Zona penyangga' },
+  { name: 'Pendopo Agung Trowulan', lat: -7.5663, lng: 112.3800, status: 'up', zone: 'Zona penyangga (gateway pusat)', gateway: true },
+];
+
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- generic Chart.js defaults ---- */
@@ -120,35 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ================= ARSIP DIGITAL PAGE ================= */
 
-  const archiveTrendEl = document.getElementById('archiveTrendChart');
-  if (archiveTrendEl) {
-    new Chart(archiveTrendEl, {
-      type: 'line',
-      data: {
-        labels: ['M1','M2','M3','M4','M5','M6','M7','M8'],
-        datasets: [{
-          label: 'Entri baru',
-          data: [14,19,11,22,17,26,20,24],
-          borderColor: '#B5482B',
-          backgroundColor: (c) => {
-            const {ctx, chartArea} = c.chart;
-            if (!chartArea) return null;
-            return gradient(ctx, chartArea, 'rgba(181,72,43,0.24)', 'rgba(181,72,43,0)');
-          },
-          tension: 0.4, fill: true, borderWidth: 2.5, pointRadius: 3, pointBackgroundColor: '#B5482B',
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { display: false } },
-          y: { grid: { color: gridColor }, beginAtZero: true }
-        }
-      }
-    });
-  }
-
   const archiveTypeEl = document.getElementById('archiveTypeChart');
   if (archiveTypeEl) {
     new Chart(archiveTypeEl, {
@@ -166,6 +158,85 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, boxHeight: 8, usePointStyle: true, padding: 14, font: { size: 11 } } } }
       }
     });
+  }
+
+  /* ---- arsip: card grid filter + pagination ---- */
+  const archiveGrid = document.getElementById('archiveGrid');
+  if (archiveGrid) {
+    const archiveCards = Array.from(archiveGrid.querySelectorAll('.arc-card'));
+    const archivePagination = document.getElementById('archivePagination');
+    const archiveNoResults = document.getElementById('archiveNoResults');
+    const archiveFilterBtns = document.querySelectorAll('.arsip-filter-pills .pill-btn');
+    const PAGE_SIZE = 6;
+    let activeFilter = 'semua';
+    let activePage = 1;
+
+    function filteredCards() {
+      return archiveCards.filter((card) => activeFilter === 'semua' || card.dataset.type === activeFilter);
+    }
+
+    function renderArchive() {
+      const filtered = filteredCards();
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      if (activePage > totalPages) activePage = totalPages;
+
+      archiveCards.forEach((card) => { card.style.display = 'none'; });
+      const start = (activePage - 1) * PAGE_SIZE;
+      filtered.slice(start, start + PAGE_SIZE).forEach((card) => { card.style.display = ''; });
+
+      if (archiveNoResults) archiveNoResults.style.display = filtered.length === 0 ? 'block' : 'none';
+      renderArchivePagination(totalPages);
+    }
+
+    function renderArchivePagination(totalPages) {
+      if (!archivePagination) return;
+      archivePagination.innerHTML = '';
+      if (totalPages <= 1) return;
+
+      const prevBtn = document.createElement('button');
+      prevBtn.type = 'button';
+      prevBtn.className = 'arc-page-btn';
+      prevBtn.setAttribute('aria-label', 'Halaman sebelumnya');
+      prevBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 18-6-6 6-6"/></svg>';
+      prevBtn.disabled = activePage === 1;
+      prevBtn.addEventListener('click', () => { activePage -= 1; renderArchive(); });
+      archivePagination.appendChild(prevBtn);
+
+      for (let i = 1; i <= totalPages; i += 1) {
+        const pageBtn = document.createElement('button');
+        pageBtn.type = 'button';
+        pageBtn.className = 'arc-page-btn' + (i === activePage ? ' active' : '');
+        pageBtn.textContent = String(i);
+        pageBtn.addEventListener('click', () => { activePage = i; renderArchive(); });
+        archivePagination.appendChild(pageBtn);
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.type = 'button';
+      nextBtn.className = 'arc-page-btn';
+      nextBtn.setAttribute('aria-label', 'Halaman berikutnya');
+      nextBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 18 6-6-6-6"/></svg>';
+      nextBtn.disabled = activePage === totalPages;
+      nextBtn.addEventListener('click', () => { activePage += 1; renderArchive(); });
+      archivePagination.appendChild(nextBtn);
+    }
+
+    archiveFilterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeFilter = btn.dataset.filter || 'semua';
+        activePage = 1;
+        renderArchive();
+      });
+    });
+
+    archiveGrid.querySelectorAll('.arc-icon-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        btn.classList.toggle('active');
+      });
+    });
+
+    renderArchive();
   }
 
   /* ================= tab / filter interactions (visual only) ================= */
@@ -204,9 +275,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalCloseEls = [document.getElementById('modalClose'), document.getElementById('modalCloseBtn')];
     let modalChartInstance = null;
 
+    const modalPhoto = document.getElementById('modalPhoto');
+
     function openModal(card) {
       const d = card.dataset;
       modalName.textContent = d.name || '—';
+      if (modalPhoto) {
+        const photo = SITE_PHOTOS[d.name];
+        if (photo) { modalPhoto.src = photo; modalPhoto.alt = d.name; modalPhoto.closest('.modal-photo').style.display = ''; }
+        else { modalPhoto.closest('.modal-photo').style.display = 'none'; }
+      }
       modalType.textContent = d.sync ? ('Diperbarui ' + d.sync) : '—';
       modalStatus.className = 'badge ' + (d.status || 'up');
       modalStatusLabel.textContent = d.statusLabel || 'Normal';
@@ -293,6 +371,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ================= mobile topbar search toggle ================= */
+  document.querySelectorAll('.topbar').forEach((topbar) => {
+    const search = topbar.querySelector('.search');
+    const toggleBtn = topbar.querySelector('.search-toggle');
+    const closeBtn = topbar.querySelector('.search-close');
+    const input = topbar.querySelector('.search input');
+    if (!search || !toggleBtn) return;
+
+    function openSearch() {
+      topbar.classList.add('search-active');
+      if (input) setTimeout(() => input.focus(), 150);
+    }
+    function closeSearch() {
+      topbar.classList.remove('search-active');
+      if (input) input.blur();
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      if (topbar.classList.contains('search-active')) return; // toggle is inert while open; use closeBtn
+      openSearch();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeSearch);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && topbar.classList.contains('search-active')) closeSearch();
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 880 && topbar.classList.contains('search-active')) closeSearch();
+    });
+  });
+
   /* ================= functional search (navbar) ================= */
   const searchInput = document.querySelector('.search input');
   if (searchInput) {
@@ -331,6 +439,193 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+
+  /* ================= Peta & Lokasi (Leaflet, koordinat asli) ================= */
+  const petaEl = document.getElementById('petaSitus');
+  if (petaEl && window.L) {
+    const map = L.map(petaEl, { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    }).addTo(map);
+
+    const statusColor = { up: '#4C7A4A', warn: '#C2872F', down: '#B23A28' };
+    const statusLabel = { up: 'Normal', warn: 'Perhatian', down: 'Kritis' };
+    const markers = [];
+
+    SITE_LOCATIONS.forEach((site) => {
+      const cls = 'site-pin' + (site.status === 'warn' ? ' warn' : '') + (site.gateway ? ' gateway' : '');
+      const icon = L.divIcon({
+        className: '',
+        html: '<div class="' + cls + '"></div>',
+        iconSize: site.gateway ? [28, 28] : [22, 22],
+        iconAnchor: site.gateway ? [14, 14] : [11, 11],
+      });
+      const marker = L.marker([site.lat, site.lng], { icon }).addTo(map);
+      const photo = SITE_PHOTOS[site.name];
+      const gmaps = 'https://www.google.com/maps/search/?api=1&query=' + site.lat + ',' + site.lng;
+      const popupHtml =
+        '<div class="site-popup">' +
+          (photo ? '<img src="' + photo + '" alt="' + site.name + '" style="width:100%;height:90px;object-fit:cover;border-radius:8px;margin-bottom:8px;">' : '') +
+          '<div class="sp-eyebrow">' + (site.gateway ? 'Node gateway pusat' : 'Situs terpantau') + '</div>' +
+          '<div class="sp-name">' + site.name + '</div>' +
+          '<div class="sp-row"><span class="pip" style="background:' + statusColor[site.status] + '"></span>' + statusLabel[site.status] + '</div>' +
+          '<div class="sp-row">' + site.zone + '</div>' +
+          '<div class="sp-links">' +
+            '<a href="situs.html?q=' + encodeURIComponent(site.name) + '">Lihat sensor →</a>' +
+            '<a href="' + gmaps + '" target="_blank" rel="noopener">Google Maps →</a>' +
+          '</div>' +
+        '</div>';
+      marker.bindPopup(popupHtml);
+      markers.push(marker);
+    });
+
+    const group = L.featureGroup(markers);
+    map.fitBounds(group.getBounds(), { padding: [28, 28] });
+  }
+
+  /* ================= Pengaturan (settings tabs + fake save) ================= */
+  const settingsNav = document.querySelectorAll('.settings-nav-item');
+  if (settingsNav.length) {
+    const panels = document.querySelectorAll('.settings-panel');
+    const settingsLayout = document.querySelector('.settings-layout');
+    const backBtn = document.querySelector('.settings-back-btn');
+    const backTitle = document.querySelector('.settings-back-title');
+    const mobileQuery = window.matchMedia('(max-width: 880px)');
+
+    function activateSection(key) {
+      settingsNav.forEach((btn) => btn.classList.toggle('active', btn.dataset.section === key));
+      panels.forEach((p) => p.classList.toggle('active', p.dataset.section === key));
+      const activeBtn = [...settingsNav].find((b) => b.dataset.section === key);
+      const label = activeBtn ? activeBtn.querySelector('.settings-nav-label') : null;
+      if (backTitle && label) backTitle.textContent = label.textContent.trim();
+    }
+
+    function openDetail() {
+      if (settingsLayout) settingsLayout.classList.add('is-detail-open');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeDetail() {
+      if (settingsLayout) settingsLayout.classList.remove('is-detail-open');
+    }
+
+    settingsNav.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activateSection(btn.dataset.section);
+        history.replaceState(null, '', '#' + btn.dataset.section);
+        if (mobileQuery.matches) openDetail();
+      });
+    });
+
+    if (backBtn) backBtn.addEventListener('click', closeDetail);
+
+    // switching from mobile → desktop width shouldn't leave the detail-only state stuck
+    mobileQuery.addEventListener('change', (e) => {
+      if (!e.matches) closeDetail();
+    });
+
+    const initialHash = window.location.hash.replace('#', '');
+    if (initialHash && [...settingsNav].some((b) => b.dataset.section === initialHash)) {
+      activateSection(initialHash);
+      if (mobileQuery.matches) openDetail();
+    }
+
+    const toastEl = document.getElementById('saveToast');
+    document.querySelectorAll('.js-save-settings').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!toastEl) return;
+        toastEl.classList.add('show');
+        clearTimeout(toastEl._t);
+        toastEl._t = setTimeout(() => toastEl.classList.remove('show'), 2600);
+      });
+    });
+
+    document.querySelectorAll('.js-toggle-2fa').forEach((cb) => {
+      cb.addEventListener('change', () => {
+        const label = document.getElementById('twoFaStatus');
+        if (label) label.textContent = cb.checked ? 'Aktif' : 'Nonaktif';
+      });
+    });
+  }
+
+  /* ================= custom overlay scrollbar ================= */
+  /* Body owns the real scroll; native scrollbar is hidden via CSS
+     and this floating track/thumb overlays the content instead of
+     reserving space, so the page never shifts width when a
+     scrollbar appears/disappears or grows/shrinks. */
+  (function () {
+    const track = document.createElement('div');
+    track.className = 'custom-scrollbar-track';
+    const thumb = document.createElement('div');
+    thumb.className = 'custom-scrollbar-thumb';
+    track.appendChild(thumb);
+    document.body.appendChild(track);
+
+    let hideTimer;
+    function flash() {
+      track.classList.add('visible');
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        if (!dragging) track.classList.remove('visible');
+      }, 900);
+    }
+
+    function update() {
+      const scrollTop = document.body.scrollTop;
+      const scrollHeight = document.body.scrollHeight;
+      const clientHeight = document.body.clientHeight;
+      if (scrollHeight <= clientHeight + 1) {
+        track.style.display = 'none';
+        return;
+      }
+      track.style.display = '';
+      const trackHeight = track.clientHeight;
+      const thumbHeight = Math.max(30, (clientHeight / scrollHeight) * trackHeight);
+      const maxThumbTop = trackHeight - thumbHeight;
+      const maxScroll = scrollHeight - clientHeight;
+      const thumbTop = maxScroll > 0 ? (scrollTop / maxScroll) * maxThumbTop : 0;
+      thumb.style.height = thumbHeight + 'px';
+      thumb.style.transform = 'translateY(' + thumbTop + 'px)';
+    }
+
+    let dragging = false, dragStartY = 0, dragStartScroll = 0;
+
+    thumb.addEventListener('mousedown', (e) => {
+      dragging = true;
+      thumb.classList.add('dragging');
+      track.classList.add('visible');
+      dragStartY = e.clientY;
+      dragStartScroll = document.body.scrollTop;
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const scrollHeight = document.body.scrollHeight;
+      const clientHeight = document.body.clientHeight;
+      const trackHeight = track.clientHeight;
+      const thumbHeight = thumb.offsetHeight;
+      const maxThumbTop = trackHeight - thumbHeight;
+      if (maxThumbTop <= 0) return;
+      const maxScroll = scrollHeight - clientHeight;
+      const deltaY = e.clientY - dragStartY;
+      document.body.scrollTop = dragStartScroll + (deltaY / maxThumbTop) * maxScroll;
+    });
+    window.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      thumb.classList.remove('dragging');
+      document.body.style.userSelect = '';
+      hideTimer = setTimeout(() => track.classList.remove('visible'), 900);
+    });
+
+    document.body.addEventListener('scroll', () => { update(); flash(); }, { passive: true });
+    window.addEventListener('resize', update);
+    new MutationObserver(update).observe(document.body, { childList: true, subtree: true });
+
+    update();
+  })();
 
   /* ================= mobile menu toggle ================= */
   const sidebarEl = document.querySelector('.sidebar');

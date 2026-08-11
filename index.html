@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="is-loading">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,54 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<!-- ===== PAGE LOADER ===== -->
+<div class="page-loader" id="pageLoader">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="amertaOutline" x="-40%" y="-40%" width="180%" height="180%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="2.4" result="dilated"/>
+        <feComposite in="dilated" in2="SourceAlpha" operator="out" result="ring"/>
+        <feFlood flood-color="#B5482B" result="ringColor"/>
+        <feComposite in="ringColor" in2="ring" operator="in"/>
+      </filter>
+    </defs>
+  </svg>
+  <div class="loader-emblem">
+    <img class="emblem-outline" src="img/amerta-logo.png" alt="" aria-hidden="true">
+    <img class="emblem-fill" src="img/amerta-logo.png" alt="Amerta">
+    <div class="loader-label"><span>Memuat AMERTA…</span></div>
+  </div>
+</div>
+<script>
+  (function(){
+    var SKIP_KEY = 'amerta_skip_loader';
+    var loaderEl = document.getElementById('pageLoader');
+
+    // navigated here via an internal link click → skip the intro animation
+    if (sessionStorage.getItem(SKIP_KEY) === '1') {
+      sessionStorage.removeItem(SKIP_KEY);
+      if (loaderEl) loaderEl.remove();
+      document.documentElement.classList.remove('is-loading');
+    } else {
+      var MIN_DURATION = 2000; // fixed duration, ms — only on first open/refresh
+      setTimeout(function(){
+        if (!loaderEl) return;
+        loaderEl.classList.add('is-hidden');
+        document.documentElement.classList.remove('is-loading');
+        setTimeout(function(){ loaderEl.remove(); }, 500);
+      }, MIN_DURATION);
+    }
+
+    // mark any internal page navigation so the NEXT page load skips the loader
+    document.addEventListener('click', function(e){
+      var link = e.target.closest('a[href$=".html"]');
+      if (!link) return;
+      if (link.target === '_blank' || e.defaultPrevented) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      sessionStorage.setItem(SKIP_KEY, '1');
+    }, true);
+  })();
+</script>
 <div class="blob-c"></div>
 <div class="shell">
   <div class="sidebar-overlay"></div>
@@ -14,11 +62,7 @@
   <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="brand-mark"><span></span></div>
-      <div>
-        <div class="brand-name">AMERTA</div>
-        <div class="brand-sub">warisan.trowulan.id</div>
-      </div>
+      <img class="brand-logo" src="img/amerta-logo-full.png" alt="AMERTA — Rumeksa Tilas, Rumawat Pradaban">
     </div>
 
     <div class="nav-group-label">Menu</div>
@@ -41,27 +85,11 @@
       </a>
     </nav>
 
-    <div class="nav-group-label">Kelembagaan</div>
-    <nav class="nav-list">
-      <a class="nav-item disabled" href="#">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87"/><path d="M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Tim &amp; Pemangku Kepentingan
-        <span class="nav-soon">soon</span>
-      </a>
-      <a class="nav-item disabled" href="#">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        Notifikasi Real-time
-        <span class="nav-soon">soon</span>
-      </a>
-      <a class="nav-item disabled" href="#">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
-        Pengaturan Ambang Batas
-        <span class="nav-soon">soon</span>
-      </a>
-    </nav>
-
     <div class="sidebar-foot">
-      <div class="status-pill"><span class="pip"></span> 5 dari 6 situs normal</div>
+      <a class="nav-item" href="pengaturan.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        Pengaturan
+      </a>
     </div>
   </aside>
 
@@ -79,8 +107,13 @@
       </div>
       <div class="topbar-spacer"></div>
       <div class="search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <button class="search-toggle" type="button" aria-label="Buka pencarian">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
         <input type="text" placeholder="Cari situs, sensor, atau ID peringatan…">
+        <button class="search-close" type="button" aria-label="Tutup pencarian">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
       </div>
       <button class="icon-btn" aria-label="Notifikasi"><span class="dot"></span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>

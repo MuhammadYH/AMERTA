@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="id" class="is-loading">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMERTA — Pengaturan</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- ===== PAGE LOADER ===== -->
+<div class="page-loader" id="pageLoader">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="amertaOutline" x="-40%" y="-40%" width="180%" height="180%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="2.4" result="dilated"/>
+        <feComposite in="dilated" in2="SourceAlpha" operator="out" result="ring"/>
+        <feFlood flood-color="#B5482B" result="ringColor"/>
+        <feComposite in="ringColor" in2="ring" operator="in"/>
+      </filter>
+    </defs>
+  </svg>
+  <div class="loader-emblem">
+    <img class="emblem-outline" src="img/amerta-logo.png" alt="" aria-hidden="true">
+    <img class="emblem-fill" src="img/amerta-logo.png" alt="Amerta">
+    <div class="loader-label"><span>Memuat AMERTA…</span></div>
+  </div>
+</div>
+<script>
+  (function(){
+    var SKIP_KEY = 'amerta_skip_loader';
+    var loaderEl = document.getElementById('pageLoader');
+
+    // navigated here via an internal link click → skip the intro animation
+    if (sessionStorage.getItem(SKIP_KEY) === '1') {
+      sessionStorage.removeItem(SKIP_KEY);
+      if (loaderEl) loaderEl.remove();
+      document.documentElement.classList.remove('is-loading');
+    } else {
+      var MIN_DURATION = 2000; // fixed duration, ms — only on first open/refresh
+      setTimeout(function(){
+        if (!loaderEl) return;
+        loaderEl.classList.add('is-hidden');
+        document.documentElement.classList.remove('is-loading');
+        setTimeout(function(){ loaderEl.remove(); }, 500);
+      }, MIN_DURATION);
+    }
+
+    // mark any internal page navigation so the NEXT page load skips the loader
+    document.addEventListener('click', function(e){
+      var link = e.target.closest('a[href$=".html"]');
+      if (!link) return;
+      if (link.target === '_blank' || e.defaultPrevented) return;
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      sessionStorage.setItem(SKIP_KEY, '1');
+    }, true);
+  })();
+</script>
+<div class="blob-c"></div>
+<div class="shell">
+  <div class="sidebar-overlay"></div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="brand-logo" src="img/amerta-logo-full.png" alt="AMERTA — Rumeksa Tilas, Rumawat Pradaban">
+    </div>
+
+    <div class="nav-group-label">Menu</div>
+    <nav class="nav-list">
+      <a class="nav-item" href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="situs.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+        Detail Situs
+      </a>
+      <a class="nav-item" href="peta.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-7.58-7-12a7 7 0 0 1 14 0c0 4.42-7 12-7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
+        Peta &amp; Lokasi
+      </a>
+      <a class="nav-item" href="arsip.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 3v6h6"/></svg>
+        Arsip Digital
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <a class="nav-item active" href="pengaturan.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        Pengaturan
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="icon-btn menu-toggle" aria-label="Buka menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="topbar-page">
+        <span class="eyebrow">AMERTA / Pengaturan</span>
+        <span class="heading">Pengaturan akun &amp; sistem</span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="search">
+        <button class="search-toggle" type="button" aria-label="Buka pencarian">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <input type="text" placeholder="Cari situs, sensor, atau ID peringatan…">
+        <button class="search-close" type="button" aria-label="Tutup pencarian">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <button class="icon-btn" aria-label="Notifikasi"><span class="dot"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <div class="avatar">RH</div>
+    </header>
+
+    <div class="settings-layout">
+
+      <!-- ============ SETTINGS NAV ============ -->
+      <nav class="settings-nav card">
+        <button class="settings-nav-item active" data-section="profil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <span class="settings-nav-label">Profil &amp; Akun</span>
+          <svg class="settings-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="settings-nav-item" data-section="notifikasi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="settings-nav-label">Notifikasi</span>
+          <svg class="settings-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="settings-nav-item" data-section="ambang">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h8M16 6h4M4 12h4M12 12h8M4 18h11M19 18h1"/><circle cx="14" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>
+          <span class="settings-nav-label">Ambang Batas Sensor</span>
+          <svg class="settings-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="settings-nav-item" data-section="tim">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="settings-nav-label">Pengguna &amp; Tim</span>
+          <svg class="settings-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="settings-nav-item" data-section="keamanan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          <span class="settings-nav-label">Keamanan</span>
+          <svg class="settings-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="settings-nav-item" data-section="data">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>
+          <span class="settings-nav-label">Data &amp; Privasi</span>
+          <svg class="settings-nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </nav>
+
+      <!-- ============ SETTINGS CONTENT ============ -->
+      <div class="settings-content">
+
+        <!-- mobile-only: back to category list -->
+        <button class="settings-back-btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          <span class="settings-back-title">Pengaturan</span>
+        </button>
+
+        <!-- ---- PROFIL & AKUN ---- -->
+        <div class="settings-panel active" data-section="profil">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Profil</div>
+                <div class="card-sub">Informasi akun yang tampil di seluruh dasbor AMERTA</div>
+              </div>
+            </div>
+
+            <div class="avatar-row" style="margin-bottom:20px;">
+              <div class="avatar-lg">RH</div>
+              <div class="avatar-actions">
+                <button class="pill-btn">Unggah foto</button>
+                <button class="pill-btn">Hapus foto</button>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fNama">Nama lengkap</label>
+                <input class="field" id="fNama" type="text" value="Rani Hastuti">
+              </div>
+              <div class="form-group">
+                <label for="fJabatan">Jabatan</label>
+                <select class="field" id="fJabatan">
+                  <option>Admin BPCB Jawa Timur</option>
+                  <option>Staf Konservasi Lapangan</option>
+                  <option>Peneliti Cagar Budaya</option>
+                  <option>Teknisi Sensor &amp; IoT</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fEmail">Alamat email</label>
+                <input class="field" id="fEmail" type="email" value="rani.hastuti@bpcb.trowulan.id">
+              </div>
+              <div class="form-group">
+                <label for="fTelp">Nomor telepon</label>
+                <input class="field" id="fTelp" type="tel" value="+62 812-3456-7890">
+              </div>
+              <div class="form-group">
+                <label for="fInstansi">Instansi</label>
+                <input class="field" id="fInstansi" type="text" value="Balai Pelestarian Cagar Budaya Jawa Timur">
+              </div>
+              <div class="form-group">
+                <label for="fBahasa">Bahasa antarmuka</label>
+                <select class="field" id="fBahasa">
+                  <option>Bahasa Indonesia</option>
+                  <option>English</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label for="fBio">Catatan singkat</label>
+                <textarea class="field" id="fBio">Mengawasi kondisi struktural dan lingkungan 6 situs cagar budaya di Kawasan Trowulan.</textarea>
+                <span class="hint">Ditampilkan pada laporan yang Anda tandatangani secara digital.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Preferensi satuan</div>
+                <div class="card-sub">Satuan yang dipakai pada grafik dan laporan</div>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fSuhuUnit">Satuan suhu</label>
+                <select class="field" id="fSuhuUnit">
+                  <option>Celsius (°C)</option>
+                  <option>Fahrenheit (°F)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fZonaWaktu">Zona waktu</label>
+                <select class="field" id="fZonaWaktu">
+                  <option>WIB (UTC+7) — Trowulan, Mojokerto</option>
+                  <option>WITA (UTC+8)</option>
+                  <option>WIT (UTC+9)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-foot">
+            <button class="pill-btn">Batalkan</button>
+            <button class="pill-btn primary js-save-settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+              Simpan perubahan
+            </button>
+          </div>
+        </div>
+
+        <!-- ---- NOTIFIKASI ---- -->
+        <div class="settings-panel" data-section="notifikasi">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Preferensi notifikasi</div>
+                <div class="card-sub">Atur bagaimana AMERTA menghubungi Anda saat ada anomali</div>
+              </div>
+            </div>
+
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Peringatan kritis via email</div>
+                <div class="toggle-sub">Getaran, suhu, atau kelembapan melewati ambang batas</div>
+              </div>
+              <label class="switch"><input type="checkbox" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Notifikasi push browser</div>
+                <div class="toggle-sub">Muncul langsung saat AMERTA terbuka di perangkat ini</div>
+              </div>
+              <label class="switch"><input type="checkbox" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Peringatan kritis via SMS</div>
+                <div class="toggle-sub">Hanya untuk status "Kritis" pada situs inti</div>
+              </div>
+              <label class="switch"><input type="checkbox"><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Baterai node sensor rendah</div>
+                <div class="toggle-sub">Peringatan saat estimasi baterai kurang dari 7 hari</div>
+              </div>
+              <label class="switch"><input type="checkbox" checked><span class="switch-track"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Ringkasan mingguan</div>
+                <div class="toggle-sub">Rekap indeks kondisi situs setiap Senin pagi</div>
+              </div>
+              <label class="switch"><input type="checkbox" checked><span class="switch-track"></span></label>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Penerima peringatan tambahan</div>
+                <div class="card-sub">Alamat email lain yang ikut menerima peringatan kritis</div>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label for="fCc">Email tembusan (pisahkan dengan koma)</label>
+                <input class="field" id="fCc" type="text" value="aditya.p@bpcb.trowulan.id, posko.trowulan@kemdikbud.go.id">
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-foot">
+            <button class="pill-btn">Batalkan</button>
+            <button class="pill-btn primary js-save-settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+              Simpan perubahan
+            </button>
+          </div>
+        </div>
+
+        <!-- ---- AMBANG BATAS SENSOR ---- -->
+        <div class="settings-panel" data-section="ambang">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Ambang batas sensor</div>
+                <div class="card-sub">Nilai yang memicu status "Perhatian" dan "Kritis" pada seluruh situs</div>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fAmbGetaran">Ambang getaran struktural</label>
+                <div class="field-suffix-wrap">
+                  <input class="field" id="fAmbGetaran" type="number" step="0.1" value="2.0">
+                  <span class="field-suffix">mm/s</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fAmbSuhu">Suhu maksimum kawasan</label>
+                <div class="field-suffix-wrap">
+                  <input class="field" id="fAmbSuhu" type="number" step="0.1" value="32.0">
+                  <span class="field-suffix">°C</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fAmbLembap">Kelembapan relatif maksimum</label>
+                <div class="field-suffix-wrap">
+                  <input class="field" id="fAmbLembap" type="number" step="1" value="90">
+                  <span class="field-suffix">% RH</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fAmbBaterai">Peringatan baterai rendah</label>
+                <div class="field-suffix-wrap">
+                  <input class="field" id="fAmbBaterai" type="number" step="1" value="20">
+                  <span class="field-suffix">%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fInterval">Interval pembacaan sensor</label>
+                <div class="field-suffix-wrap">
+                  <input class="field" id="fInterval" type="number" step="1" value="15">
+                  <span class="field-suffix">menit</span>
+                </div>
+                <span class="hint">Berlaku untuk seluruh node LoRaWAN di Kawasan Trowulan.</span>
+              </div>
+              <div class="form-group">
+                <label for="fEskalasi">Eskalasi otomatis setelah</label>
+                <div class="field-suffix-wrap">
+                  <input class="field" id="fEskalasi" type="number" step="1" value="2">
+                  <span class="field-suffix">jam</span>
+                </div>
+                <span class="hint">Status "Diselidiki" naik ke "Kritis" jika belum ditindaklanjuti.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-foot">
+            <button class="pill-btn">Kembalikan ke bawaan</button>
+            <button class="pill-btn primary js-save-settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+              Simpan perubahan
+            </button>
+          </div>
+        </div>
+
+        <!-- ---- PENGGUNA & TIM ---- -->
+        <div class="settings-panel" data-section="tim">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Pengguna &amp; tim</div>
+                <div class="card-sub">Anggota yang punya akses ke dasbor AMERTA</div>
+              </div>
+              <button class="pill-btn primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+                Undang pengguna
+              </button>
+            </div>
+
+            <div class="user-row">
+              <div class="user-avatar">RH</div>
+              <div class="user-body">
+                <div class="user-name">Rani Hastuti</div>
+                <div class="user-email">rani.hastuti@bpcb.trowulan.id</div>
+              </div>
+              <div class="user-role"><span class="badge up"><span class="pip"></span>Admin</span></div>
+              <div class="user-actions">
+                <button class="row-btn ghost">Kelola</button>
+              </div>
+            </div>
+            <div class="user-row">
+              <div class="user-avatar">AP</div>
+              <div class="user-body">
+                <div class="user-name">Aditya P.</div>
+                <div class="user-email">aditya.p@bpcb.trowulan.id</div>
+              </div>
+              <div class="user-role"><span class="badge warn"><span class="pip"></span>Staf Lapangan</span></div>
+              <div class="user-actions">
+                <button class="row-btn ghost">Kelola</button>
+              </div>
+            </div>
+            <div class="user-row">
+              <div class="user-avatar">SW</div>
+              <div class="user-body">
+                <div class="user-name">Siti Wulandari</div>
+                <div class="user-email">siti.w@bpcb.trowulan.id</div>
+              </div>
+              <div class="user-role"><span class="badge warn"><span class="pip"></span>Peneliti</span></div>
+              <div class="user-actions">
+                <button class="row-btn ghost">Kelola</button>
+              </div>
+            </div>
+            <div class="user-row">
+              <div class="user-avatar">BF</div>
+              <div class="user-body">
+                <div class="user-name">Bagus Firmansyah</div>
+                <div class="user-email">bagus.f@bpcb.trowulan.id</div>
+              </div>
+              <div class="user-role"><span class="badge up"><span class="pip"></span>Teknisi IoT</span></div>
+              <div class="user-actions">
+                <button class="row-btn ghost">Kelola</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- KEAMANAN ---- -->
+        <div class="settings-panel" data-section="keamanan">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Ubah kata sandi</div>
+                <div class="card-sub">Gunakan kombinasi yang belum pernah dipakai sebelumnya</div>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label for="fPassLama">Kata sandi saat ini</label>
+                <input class="field" id="fPassLama" type="password" placeholder="••••••••••">
+              </div>
+              <div class="form-group">
+                <label for="fPassBaru">Kata sandi baru</label>
+                <input class="field" id="fPassBaru" type="password" placeholder="••••••••••">
+              </div>
+              <div class="form-group">
+                <label for="fPassUlang">Ulangi kata sandi baru</label>
+                <input class="field" id="fPassUlang" type="password" placeholder="••••••••••">
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-title">Autentikasi dua faktor (2FA)</div>
+                <div class="toggle-sub">Status: <strong id="twoFaStatus">Aktif</strong> — via aplikasi autentikator</div>
+              </div>
+              <label class="switch"><input type="checkbox" class="js-toggle-2fa" checked><span class="switch-track"></span></label>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Perangkat aktif</div>
+                <div class="card-sub">Sesi yang sedang masuk ke akun Anda</div>
+              </div>
+            </div>
+            <div class="event-row">
+              <div class="event-icon up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <div class="event-body">
+                <div class="event-title">Chrome · Windows — Trowulan, Mojokerto</div>
+                <div class="event-sub">Perangkat ini · aktif sekarang</div>
+              </div>
+              <div class="event-right"><span class="event-tag resolved">Sesi ini</span></div>
+            </div>
+            <div class="event-row">
+              <div class="event-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
+              </div>
+              <div class="event-body">
+                <div class="event-title">AMERTA Mobile · Android</div>
+                <div class="event-sub">Terakhir aktif kemarin, 19:40</div>
+              </div>
+              <div class="event-right"><button class="row-btn ghost">Keluar</button></div>
+            </div>
+            <div class="settings-foot" style="padding-top:14px;">
+              <button class="btn-danger">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+                Keluar dari semua perangkat
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-foot">
+            <button class="pill-btn">Batalkan</button>
+            <button class="pill-btn primary js-save-settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+              Simpan perubahan
+            </button>
+          </div>
+        </div>
+
+        <!-- ---- DATA & PRIVASI ---- -->
+        <div class="settings-panel" data-section="data">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Ekspor data</div>
+                <div class="card-sub">Unduh data sensor dan arsip untuk pelaporan eksternal</div>
+              </div>
+            </div>
+            <div class="action-row">
+              <button class="pill-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                Ekspor data sensor (.csv)
+              </button>
+              <button class="pill-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                Ekspor arsip digital (.zip)
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Retensi data</div>
+                <div class="card-sub">Lama data mentah sensor disimpan sebelum diarsipkan</div>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fRetensi">Simpan data mentah selama</label>
+                <select class="field" id="fRetensi">
+                  <option>90 hari</option>
+                  <option selected>180 hari</option>
+                  <option>365 hari</option>
+                  <option>Selamanya</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <div class="card-title">Zona berbahaya</div>
+                <div class="card-sub">Tindakan berikut tidak dapat dibatalkan</div>
+              </div>
+            </div>
+            <div class="danger-zone">
+              <div class="danger-info">
+                <div class="dz-title">Kembalikan ambang batas sensor ke bawaan pabrik</div>
+                <div class="dz-sub">Semua nilai kustom pada halaman Ambang Batas Sensor akan dihapus.</div>
+              </div>
+              <button class="btn-danger">Reset ambang batas</button>
+            </div>
+            <div class="danger-zone">
+              <div class="danger-info">
+                <div class="dz-title">Hapus akun ini</div>
+                <div class="dz-sub">Akses Anda ke AMERTA akan dicabut secara permanen.</div>
+              </div>
+              <button class="btn-danger">Hapus akun</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="save-toast" id="saveToast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
+  Perubahan berhasil disimpan
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
